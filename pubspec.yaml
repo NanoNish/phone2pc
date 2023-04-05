@@ -39,6 +39,7 @@ dependencies:
   ping_discover_network_forked: ^0.0.1
   network_info_plus: ^3.0.2
   bonsoir: ^2.0.0
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
