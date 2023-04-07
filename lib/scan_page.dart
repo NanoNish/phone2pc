@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io' show Platform;
 
@@ -49,7 +47,10 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/home'),
+            onPressed: () => Navigator.pop(
+              context,
+              result!.code!,
+            ),
             child: const Text('Back to Home'),
           ),
         ],

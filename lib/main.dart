@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (BuildContext context) => const HomePage(),
         '/scan': (BuildContext context) => const ScanPage(),
-        '/source': (BuildContext context) => const SourcePage(),
       },
       initialRoute: '/home',
     );

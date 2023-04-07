@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
+import 'package:phone2pc/scan_page.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:io';
 
@@ -12,6 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? ip;
+  String? scannedIP;
+  bool serverRunning = false;
+  HttpServer? server;
 
   @override
   void initState() {
@@ -27,12 +31,15 @@ class _HomePageState extends State<HomePage> {
   void scan() {}
 
   void broadcast() async {
+    if (serverRunning) return;
     final tempIP = await getIP();
+    final tempServer = await HttpServer.bind(InternetAddress.anyIPv6, 8080);
     setState(() {
       ip = tempIP;
+      server ??= tempServer;
+      if (server != null) serverRunning = true;
     });
-    var server = await HttpServer.bind(InternetAddress.anyIPv4, 8080);
-    await server.forEach((HttpRequest request) {
+    await server!.forEach((HttpRequest request) {
       request.response.write('Hello, world!');
       request.response.close();
     });
@@ -54,7 +61,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/scan'),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ScanPage(),
+                ),
+              );
+              setState(() {
+                scannedIP = result;
+              });
+            },
             child: const Text("Scan"),
           ),
         ),
