@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:ping_discover_network_forked/ping_discover_network_forked.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-// import 'package:bonsoir/bonsoir.dart';
+import 'package:qr/qr.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,7 +49,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: TextButton(
-            onPressed: scan,
+            onPressed: () => Navigator.pushNamed(context, '/scan'),
             child: const Text("Scan"),
           ),
         ),

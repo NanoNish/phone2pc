@@ -40,6 +40,9 @@ dependencies:
   network_info_plus: ^3.0.2
   bonsoir: ^2.0.0
   qr_flutter: ^4.0.0
+  qr_code_scanner: ^1.0.1
+  flutter_webrtc: ^0.9.24
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

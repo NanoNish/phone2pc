@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './home_page.dart';
 import './scan_page.dart';
+import './source_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,10 +20,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/home': (context) => const HomePage(),
-        '/scan': (context) => const ScanPage(),
+        '/home': (BuildContext context) => const HomePage(),
+        '/scan': (BuildContext context) => const ScanPage(),
+        '/source': (BuildContext context) => const SourcePage(),
       },
       initialRoute: '/home',
     );
   }
 }
+
+//minSDKVersion is set to 20 however it can be changed
