@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr/qr.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,6 +30,11 @@ class _HomePageState extends State<HomePage> {
     final tempIP = await getIP();
     setState(() {
       ip = tempIP;
+    });
+    var server = await HttpServer.bind(InternetAddress.anyIPv4, 8080);
+    await server.forEach((HttpRequest request) {
+      request.response.write('Hello, world!');
+      request.response.close();
     });
   }
 
