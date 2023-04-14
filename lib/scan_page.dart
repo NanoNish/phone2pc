@@ -82,6 +82,12 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   @override
+  void initState() {
+    _peerConnection = _createPeerConnection();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
