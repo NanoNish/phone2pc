@@ -19,10 +19,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/home': (context) => const HomePage(),
-        '/scan': (context) => const ScanPage(),
+        '/home': (BuildContext context) => const HomePage(),
+        '/scan': (BuildContext context) => const ScanPage(),
       },
       initialRoute: '/home',
     );
   }
 }
+
+//minSDKVersion is set to 20 however it can be changed

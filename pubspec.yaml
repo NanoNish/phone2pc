@@ -35,10 +35,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  ping_discover_network: ^0.2.0+1
-  ping_discover_network_forked: ^0.0.1
   network_info_plus: ^3.0.2
-  bonsoir: ^2.0.0
+  qr_flutter: ^4.0.0
+  qr_code_scanner: ^1.0.1
+  flutter_webrtc: ^0.9.24
+  http: ^0.13.5
+  # ip_geolocation_api: ^0.0.1
 
 dev_dependencies:
   flutter_test:
