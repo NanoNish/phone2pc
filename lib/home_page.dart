@@ -3,7 +3,6 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:phone2pc/scan_page.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:io';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 // import 'package:ip_geolocation_api/ip_geolocation_api.dart';
 

@@ -17,38 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
-  bonsoir:
-    dependency: "direct main"
-    description:
-      name: bonsoir
-      sha256: d804e89b71da2c32c48a8c0a0c100e746521869429721ffbd61330ee95933836
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  bonsoir_android:
-    dependency: transitive
-    description:
-      name: bonsoir_android
-      sha256: "2c089240abba5e1f466f2b6e690b6400fbfe9a446c5233cce4b79de279982909"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0+1"
-  bonsoir_darwin:
-    dependency: transitive
-    description:
-      name: bonsoir_darwin
-      sha256: e6dfa3062cb9dc40cb3b640445a9b1c727677c9e27dc54104b2743e58bd5f80c
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0+3"
-  bonsoir_platform_interface:
-    dependency: transitive
-    description:
-      name: bonsoir_platform_interface
-      sha256: "2f30c5f144309f690f11890e7db52ddc8a4f8a576a1ec9e3761bb430c2b986cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -89,14 +57,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  dart_ipify:
-    dependency: "direct main"
-    description:
-      name: dart_ipify
-      sha256: "3b70d589504126107e81ad0703d91394cc8e2039cb0a11ebd92b9b824a5e9561"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   dart_webrtc:
     dependency: transitive
     description:
@@ -312,22 +272,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
-  ping_discover_network:
-    dependency: "direct main"
-    description:
-      name: ping_discover_network
-      sha256: f0b2a14cfecdf214e4e6587c362656dd56eaede0e4e26ae0439ad11990d61d7a
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0+1"
-  ping_discover_network_forked:
-    dependency: "direct main"
-    description:
-      name: ping_discover_network_forked
-      sha256: d3975c4f3fbaa388f78fb4037ad9c33059d8e2ec0e804ed45e05277d2451fe77
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   platform:
     dependency: transitive
     description:
