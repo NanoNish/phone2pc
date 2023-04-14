@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:network_info_plus/network_info_plus.dart';
+import 'dart:io';
 
 class BroadCastPage extends StatefulWidget {
   const BroadCastPage({super.key});
@@ -8,8 +11,63 @@ class BroadCastPage extends StatefulWidget {
 }
 
 class _BroadCastPageState extends State<BroadCastPage> {
+  String? ip;
+  String? scannedIP;
+  bool serverRunning = false;
+  HttpServer? server;
+
+  Future<String> getIP() async {
+    // final response = await http.get(
+    //   Uri.parse('https://api.ipify.org'),
+    // );
+    // print(response.body);
+    // return response.body;
+    final info = NetworkInfo();
+    String? wifiIP = await info.getWifiIP();
+    print(wifiIP);
+    return wifiIP!;
+  }
+
+  void broadcast() async {
+    if (serverRunning) return;
+    final tempIP = await getIP();
+    final tempServer = await HttpServer.bind(InternetAddress.anyIPv6, 6969);
+    setState(() {
+      ip = tempIP;
+      server ??= tempServer;
+      if (server != null) serverRunning = true;
+    });
+    await server!.forEach((HttpRequest request) {
+      request.response.write('Hello, world!');
+      request.response.close();
+    });
+  }
+
+  
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Periscope",
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+          ),
+        ),
+        child: (ip == null
+            ? const SizedBox(
+                height: 0,
+              )
+            : QrImage(
+                data: ip!,
+                version: QrVersions.auto,
+                size: 200.0,
+              )),
+      ),
+    );
   }
 }

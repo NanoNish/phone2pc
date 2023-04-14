@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'dart:io' show Platform;
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -26,9 +27,25 @@ class _ScanPageState extends State<ScanPage> {
     }
   }
 
+  void scan() async {
+    final response = await sendOffer("title");
+    print(response);
+  }
+
+  Future<http.Response> sendOffer(String title) {
+    return http.get(
+      Uri.parse('http://${result!.code}:6969'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Periscope",
+        ),
+      ),
       body: Column(
         children: <Widget>[
           Expanded(

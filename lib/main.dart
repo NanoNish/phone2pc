@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phone2pc/camera_page.dart';
 import './home_page.dart';
 import './scan_page.dart';
 
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (BuildContext context) => const HomePage(),
         '/scan': (BuildContext context) => const ScanPage(),
+        '/camera': (BuildContext context) => const CameraPage(),
       },
-      initialRoute: '/home',
+      initialRoute: '/camera',
     );
   }
 }
