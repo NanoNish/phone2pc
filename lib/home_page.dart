@@ -3,6 +3,9 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:phone2pc/scan_page.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+// import 'package:ip_geolocation_api/ip_geolocation_api.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,17 +26,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<String> getIP() async {
+    // final response = await http.get(
+    //   Uri.parse('https://api.ipify.org'),
+    // );
+    // print(response.body);
+    // return response.body;
     final info = NetworkInfo();
     String? wifiIP = await info.getWifiIP();
+    print(wifiIP);
     return wifiIP!;
   }
 
-  void scan() {}
+  void scan() async {
+    final response = await sendOffer("title");
+    print(response);
+  }
+
+  Future<http.Response> sendOffer(String title) {
+    return http.get(
+      Uri.parse('http://$scannedIP:6969'),
+    );
+  }
 
   void broadcast() async {
     if (serverRunning) return;
     final tempIP = await getIP();
-    final tempServer = await HttpServer.bind(InternetAddress.anyIPv6, 8080);
+    final tempServer = await HttpServer.bind(InternetAddress.anyIPv6, 6969);
     setState(() {
       ip = tempIP;
       server ??= tempServer;
@@ -71,6 +89,7 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 scannedIP = result;
               });
+              scan();
             },
             child: const Text("Scan"),
           ),
@@ -90,20 +109,21 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black,
-              ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black,
             ),
-            child: (ip == null
-                ? const SizedBox(
-                    height: 0,
-                  )
-                : QrImage(
-                    data: ip!,
-                    version: QrVersions.auto,
-                    size: 200.0,
-                  ))),
+          ),
+          child: (ip == null
+              ? const SizedBox(
+                  height: 0,
+                )
+              : QrImage(
+                  data: ip!,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )),
+        ),
       ],
     ));
   }

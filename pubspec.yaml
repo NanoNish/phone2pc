@@ -43,6 +43,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   flutter_webrtc: ^0.9.24
   http: ^0.13.5
+  dart_ipify: ^1.1.1
+  # ip_geolocation_api: ^0.0.1
 
 dev_dependencies:
   flutter_test:
