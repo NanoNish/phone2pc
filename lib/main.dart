@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:phone2pc/broadcast_page.dart';
 import 'package:phone2pc/camera_page.dart';
-import './home_page.dart';
-import './scan_page.dart';
+import 'package:phone2pc/home_page.dart';
+import 'package:phone2pc/scan_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
         '/home': (BuildContext context) => const HomePage(),
         '/scan': (BuildContext context) => const ScanPage(),
         '/camera': (BuildContext context) => const CameraPage(),
+        '/broadcast': (BuildContext context) => const BroadCastPage(),
       },
-      initialRoute: '/camera',
+      initialRoute: '/home',
     );
   }
 }

@@ -12,7 +12,6 @@ class BroadCastPage extends StatefulWidget {
 
 class _BroadCastPageState extends State<BroadCastPage> {
   String? ip;
-  String? scannedIP;
   bool serverRunning = false;
   HttpServer? server;
 
@@ -43,7 +42,12 @@ class _BroadCastPageState extends State<BroadCastPage> {
     });
   }
 
-  
+  @override
+  void initState() {
+    broadcast();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,21 +56,31 @@ class _BroadCastPageState extends State<BroadCastPage> {
           "Periscope",
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black,
+            ),
           ),
+          child: (ip == null
+              ? const SizedBox(
+                  height: 0,
+                )
+              : QrImage(
+                  data: ip!,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )),
         ),
-        child: (ip == null
-            ? const SizedBox(
-                height: 0,
-              )
-            : QrImage(
-                data: ip!,
-                version: QrVersions.auto,
-                size: 200.0,
-              )),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: broadcast,
+        child: const Icon(
+          Icons.refresh,
+        ),
       ),
     );
   }

@@ -176,7 +176,7 @@ class _CameraPageState extends State<CameraPage> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(0.0),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: TextField(

@@ -64,11 +64,8 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(
-              context,
-              result!.code!,
-            ),
-            child: const Text('Back to Home'),
+            onPressed: scan,
+            child: const Text('Not not Back to Home'),
           ),
         ],
       ),
