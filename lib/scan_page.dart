@@ -3,8 +3,6 @@ import 'package:phone2pc/result.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
 
-import 'package:flutter_webrtc/flutter_webrtc.dart';
-
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
 
@@ -59,7 +57,7 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, '/camerascan', arguments: Result(result!.code)),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/camera', arguments: Result(result!.code, false)),
             child: const Text('Not not Back to Home'),
           ),
         ],

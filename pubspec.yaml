@@ -41,6 +41,7 @@ dependencies:
   flutter_webrtc: ^0.9.24
   http: ^0.13.5
   sdp_transform: ^0.3.2
+  shelf: ^1.4.0
   # ip_geolocation_api: ^0.0.1
 
 dev_dependencies:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:network_info_plus/network_info_plus.dart';
+import './result.dart';
 
 class BroadCastPage extends StatefulWidget {
   const BroadCastPage({super.key});
@@ -20,11 +21,6 @@ class _BroadCastPageState extends State<BroadCastPage> {
   }
 
   Future<String> getIP() async {
-    // final response = await http.get(
-    //   Uri.parse('https://api.ipify.org'),
-    // );
-    // print(response.body);
-    // return response.body;
     final info = NetworkInfo();
     String? wifiIP = await info.getWifiIP();
     print(wifiIP);
@@ -67,7 +63,7 @@ class _BroadCastPageState extends State<BroadCastPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            Navigator.pushReplacementNamed(context, '/camerabcast'),
+            Navigator.pushReplacementNamed(context, '/camera', arguments: Result(ip, true)),
         child: const Icon(
           Icons.refresh,
         ),
