@@ -2,16 +2,35 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:phone2pc/result.dart';
 import 'package:sdp_transform/sdp_transform.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+  CameraPage({Key? key, required this.isBroadcast}) : super(key: key);
+
+  String? ip = "10.61.23.205";
+  final bool isBroadcast;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
 }
 
+class SDP {
+  String offer;
+
+  SDP({
+    required this.offer,
+  });
+}
+
 class _CameraPageState extends State<CameraPage> {
+  String? ip;
+  bool serverRunning = false;
+  HttpServer? server;
+  var iceCandidate;
+
   final _localVideoRenderer = RTCVideoRenderer();
   final _remoteVideoRenderer = RTCVideoRenderer();
   final sdpController = TextEditingController();
@@ -20,6 +39,43 @@ class _CameraPageState extends State<CameraPage> {
 
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
+
+  void scan() async {
+    final sdpOffer = await _createOffer();
+    final response = await sendOffer(sdpOffer);
+    _setRemoteDescription(response.headers["sdpAnswer"]!);
+    _addCandidate(response.headers["candidate"]!);
+  }
+
+  void broadcast() async {
+    final tempServer = await HttpServer.bind(InternetAddress.anyIPv6, 6969);
+    setState(() {
+      server ??= tempServer;
+      if (server != null) serverRunning = true;
+    });
+    await server!.forEach((HttpRequest request) async {
+      print(request.headers["sdpOffer"]);
+      _setRemoteDescription(request.headers["sdpOffer"]!.first);
+      // String data = await utf8.decoder.bind(request).join();
+      // debugPrint(data);
+
+      request.response.headers.add("sdpOffer", await _createOffer());
+      request.response.headers.add("candidate", iceCandidate);
+
+      request.response.close();
+    });
+  }
+
+  Future<http.Response> sendOffer(String sdpOffer) {
+    print(sdpOffer);
+    return http.post(
+      Uri.parse('http://$ip:6969'),
+      headers: <String, String>{
+        "sdpOffer": sdpOffer,
+      },
+      // body: SDP(offer: sdpOffer),
+    );
+  }
 
   initRenderer() async {
     await _localVideoRenderer.initialize();
@@ -61,6 +117,13 @@ class _CameraPageState extends State<CameraPage> {
 
     pc.onIceCandidate = (e) {
       if (e.candidate != null) {
+        setState(() {
+          iceCandidate ??= json.encode({
+            'candidate': e.candidate.toString(),
+            'sdpMid': e.sdpMid.toString(),
+            'sdpMlineIndex': e.sdpMLineIndex,
+          });
+        });
         print(json.encode({
           'candidate': e.candidate.toString(),
           'sdpMid': e.sdpMid.toString(),
@@ -81,7 +144,7 @@ class _CameraPageState extends State<CameraPage> {
     return pc;
   }
 
-  void _createOffer() async {
+  Future<String> _createOffer() async {
     RTCSessionDescription description =
         await _peerConnection!.createOffer({'offerToReceiveVideo': 1});
     var session = parse(description.sdp.toString());
@@ -89,9 +152,10 @@ class _CameraPageState extends State<CameraPage> {
     _offer = true;
 
     _peerConnection!.setLocalDescription(description);
+    return json.encode(session);
   }
 
-  void _createAnswer() async {
+  Future<String> _createAnswer() async {
     RTCSessionDescription description =
         await _peerConnection!.createAnswer({'offerToReceiveVideo': 1});
 
@@ -99,10 +163,11 @@ class _CameraPageState extends State<CameraPage> {
     print(json.encode(session));
 
     _peerConnection!.setLocalDescription(description);
+    return json.encode(session);
   }
 
-  void _setRemoteDescription() async {
-    String jsonString = sdpController.text;
+  void _setRemoteDescription(String sdpDesc) async {
+    String jsonString = sdpDesc;
     dynamic session = await jsonDecode(jsonString);
 
     String sdp = write(session, null);
@@ -114,8 +179,8 @@ class _CameraPageState extends State<CameraPage> {
     await _peerConnection!.setRemoteDescription(description);
   }
 
-  void _addCandidate() async {
-    String jsonString = sdpController.text;
+  void _addCandidate(String candid) async {
+    String jsonString = candid;
     dynamic session = await jsonDecode(jsonString);
     print(session['candidate']);
     dynamic candidate = RTCIceCandidate(
@@ -129,6 +194,11 @@ class _CameraPageState extends State<CameraPage> {
     _createPeerConnecion().then((pc) {
       _peerConnection = pc;
     });
+    if (widget.isBroadcast) {
+      broadcast();
+    } else {
+      scan();
+    }
     // _getUserMedia();
     super.initState();
   }
@@ -205,14 +275,14 @@ class _CameraPageState extends State<CameraPage> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: _setRemoteDescription,
+                    onPressed: () => _setRemoteDescription,
                     child: const Text("Set Remote Description"),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: _addCandidate,
+                    onPressed: () => _addCandidate,
                     child: const Text("Set Candidate"),
                   ),
                 ],

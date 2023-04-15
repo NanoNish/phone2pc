@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (BuildContext context) => const HomePage(),
         '/scan': (BuildContext context) => const ScanPage(),
-        '/camera': (BuildContext context) => const CameraPage(),
+        '/camerabcast': (BuildContext context) => CameraPage(isBroadcast: true),
+        '/camerascan': (BuildContext context) => CameraPage(isBroadcast: false),
         '/broadcast': (BuildContext context) => const BroadCastPage(),
       },
       initialRoute: '/home',

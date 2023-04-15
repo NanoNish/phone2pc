@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:network_info_plus/network_info_plus.dart';
-import 'dart:io';
 
 class BroadCastPage extends StatefulWidget {
   const BroadCastPage({super.key});
@@ -12,8 +11,13 @@ class BroadCastPage extends StatefulWidget {
 
 class _BroadCastPageState extends State<BroadCastPage> {
   String? ip;
-  bool serverRunning = false;
-  HttpServer? server;
+
+  void broadcast() async {
+    final tempIP = await getIP();
+    setState(() {
+      ip = tempIP;
+    });
+  }
 
   Future<String> getIP() async {
     // final response = await http.get(
@@ -25,21 +29,6 @@ class _BroadCastPageState extends State<BroadCastPage> {
     String? wifiIP = await info.getWifiIP();
     print(wifiIP);
     return wifiIP!;
-  }
-
-  void broadcast() async {
-    if (serverRunning) return;
-    final tempIP = await getIP();
-    final tempServer = await HttpServer.bind(InternetAddress.anyIPv6, 6969);
-    setState(() {
-      ip = tempIP;
-      server ??= tempServer;
-      if (server != null) serverRunning = true;
-    });
-    await server!.forEach((HttpRequest request) {
-      request.response.write('Hello, world!');
-      request.response.close();
-    });
   }
 
   @override
@@ -77,7 +66,8 @@ class _BroadCastPageState extends State<BroadCastPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: broadcast,
+        onPressed: () =>
+            Navigator.pushReplacementNamed(context, '/camerabcast'),
         child: const Icon(
           Icons.refresh,
         ),

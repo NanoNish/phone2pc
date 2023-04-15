@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:phone2pc/result.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:sdp_transform/sdp_transform.dart';
-import 'dart:convert';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -17,7 +16,6 @@ class _ScanPageState extends State<ScanPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
-  RTCPeerConnection? _peerConnection;
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   @override
@@ -30,60 +28,8 @@ class _ScanPageState extends State<ScanPage> {
     }
   }
 
-  void scan() async {
-    final sdpOffer = await _createOffer();
-    final response = await sendOffer(sdpOffer!);
-    print(response);
-  }
-
-  _createPeerConnection() async {
-    Map<String, dynamic> configuration = {};
-
-    final Map<String, dynamic> offerSdpConstraints = {
-      "mandatory": {
-        "OfferToReceiveAudio": true,
-        "OfferToReceiveVideo": true,
-      },
-      "optional": [],
-    };
-
-    RTCPeerConnection pc =
-        await createPeerConnection(configuration, offerSdpConstraints);
-
-    pc.onIceCandidate = (e) {
-      if (e.candidate != null) {
-        print(json.encode({
-          'candidate': e.candidate.toString(),
-          'sdpMid': e.sdpMid.toString(),
-          'sdpMlineIndex': e.sdpMLineIndex,
-        }));
-      }
-    };
-
-    pc.onIceConnectionState = (e) {
-      print(e);
-    };
-
-    return pc;
-  }
-
-  _createOffer() async {
-    RTCSessionDescription description =
-        await _peerConnection!.createOffer({'offerToReceiveVideo': 1});
-    var session = parse(description.sdp.toString());
-    _peerConnection!.setLocalDescription(description);
-    return (json.encode(session));
-  }
-
-  Future<http.Response> sendOffer(String title) {
-    return http.get(
-      Uri.parse('http://${result!.code}:6969'),
-    );
-  }
-
   @override
   void initState() {
-    _peerConnection = _createPeerConnection();
     super.initState();
   }
 
@@ -113,7 +59,7 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
           TextButton(
-            onPressed: scan,
+            onPressed: () => Navigator.pushReplacementNamed(context, '/camerascan', arguments: Result(result!.code)),
             child: const Text('Not not Back to Home'),
           ),
         ],
